@@ -5,6 +5,25 @@ Optimization", which investigates a new symbolic regression method leveraging th
 
 The code is implemented in Python 3 and requires the packages specified in ``requirements.txt``.
 
+## Usage
+
+For applications it is usually enough to use the wrapper `ParFamWrapper` in `parfamwrapper.py` by simply calling
+
+````
+parfam = ParFamWrapper(iterate=True, functions=functions, function_names=function_names)
+parfam.fit(x, y, time_limit=100)
+````
+
+The computed formula can then be assessed by running 
+````
+parfam.formula_reduced
+````
+and it can be used for predictions using
+````
+y_pred = parfam.predict(x).
+````
+A more thourough introduction with some examples is schon in `example.ipynb`
+
 ## Structure
 
 The `parfam_torch.py` module contains the main work of this repository: The `ParFamTorch` class which defines the ParFam
@@ -26,7 +45,7 @@ evaluator = Evaluator(x, y, model=model, lambda_0=0, lambda_1=0.001, lambda_deno
 model.prepare_input_monomials(x)
 x0 = np.random.randn(n_params)
 ret = basinhopping(evaluator.loss_func, niter=5, x0=x0, minimizer_kwargs={'jac': evaluator.gradient})
-coefficients = torch.tensor(ret.x, device=device))
+coefficients = torch.tensor(ret.x, device=device)
 ````
 
 Running `parfam_torch.py` will start the computation of a simple test function, to see if everything has been installed 
@@ -68,17 +87,7 @@ To run the experiments for the optimizer comparison set the variable `comparison
 `True` and choose the optimizer you want to test. 
 All our results are saved in the `results` folder. 
 
-The results and the code to train and test DL-ParFam can be found in the folder `trainingOnSyntheticData`.
-The pre-trained model used in the paper and some additional ones can be found in the folder 
-`trainingOnSyntheticData/trained_models`. To train a new one run the command
-
-```commandline
-python trainingOnSyntheticData/train.py -c train.ini
-```
-
-Here `train.ini` is a config file stored in the folder `trainingOnSyntheticData/config` in which you can configure the 
-synthetic data, the neural network and its optimization procedure. To analyze them see the notebook 
-`trainingOnSyntheticData/Exploring results.ipynb`. 
+The notebook `expressivity.ipynb` contains our calculation in Section 2.2.
 
 
 ## References
